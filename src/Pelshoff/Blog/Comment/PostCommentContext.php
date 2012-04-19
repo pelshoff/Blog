@@ -25,51 +25,58 @@ class PostCommentContext
 	private $articleRepository;
 
 	/**
-	 * @var UserEventListener
-	 */
-	private $listener;
-
-	/**
 	 * @param \Pelshoff\Blog\Model\ArticleRepository $articleRepository
 	 * @param \Pelshoff\Blog\Model\CommentRepository $commentRepository
-	 * @param \Pelshoff\DCI\UserEventListener $listener
 	 */
-	public function __construct(ArticleRepository $articleRepository, CommentRepository $commentRepository, UserEventListener $listener)
+	public function __construct(ArticleRepository $articleRepository, CommentRepository $commentRepository)
 	{
 		$this->articleRepository = $articleRepository;
 		$this->commentRepository = $commentRepository;
-		$this->listener = $listener;
 	}
 
 	/**
 	 * @param PostCommentRequest $request
+	 * @param \Pelshoff\DCI\UserEventListener $listener
 	 * @return PostCommentResult
 	 */
-	public function execute(PostCommentRequest $request)
+	public function execute(UserEventListener $listener, PostCommentRequest $request)
 	{
 		$article = $this->articleRepository->findArticleByUrl($request->getArticleUrl());
 		if (!$article) {
 			return new PostCommentResult(PostCommentResult::NONE);
 		}
-		if (!$this->listener->isSubmitted()) {
+		if (!$listener->isSubmitted()) {
 			return new PostCommentResult(PostCommentResult::NONE, $article);
 		}
-		if (!$this->listener->isValid()) {
+		if (!$listener->isValid()) {
 			return new PostCommentResult(PostCommentResult::FAILURE, $article);
 		}
-		$data = $this->getFilteredData();
-		$comment = $this->commentRepository->create();
-		$this->fillComment($comment, $article, $data, $request->getClientIp());
-		$this->commentRepository->store($comment);
+		$comment = $this->createComment($listener, $article, $request);
 		return new PostCommentResult(PostCommentResult::SUCCESS, $article, $comment);
 	}
 
 	/**
+	 * @param \Pelshoff\DCI\UserEventListener $listener
+	 * @param \Pelshoff\Blog\Model\Article $article
+	 * @param PostCommentRequest $request
+	 * @return \Pelshoff\Blog\Model\Comment
+	 */
+	private function createComment(UserEventListener $listener, Article $article, PostCommentRequest $request)
+	{
+		$data = $this->filterData($listener->getData());
+		$comment = $this->commentRepository->create();
+		$this->fillComment($comment, $article, $data, $request->getClientIp());
+		$this->commentRepository->store($comment);
+		return $comment;
+	}
+
+	/**
+	 * @param array $data
 	 * @return array
 	 */
-	private function getFilteredData()
+	private function filterData(array $data)
 	{
-		$data = array_map(function($value) { return trim(strip_tags($value)); }, $this->listener->getData());
+		$data = array_map(function($value) { return trim(strip_tags($value)); }, $data);
 		return $data;
 	}
 

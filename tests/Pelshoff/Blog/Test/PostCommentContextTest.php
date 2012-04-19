@@ -4,8 +4,6 @@ namespace Pelshoff\Blog\Test;
 use Pelshoff\Blog\Comment\PostCommentContext;
 
 /**
- *
- *
  * @author		Pim Elshoff <pim@pelshoff.com>
  */
 class PostCommentContextTest extends \PHPUnit_Framework_TestCase
@@ -25,10 +23,11 @@ class PostCommentContextTest extends \PHPUnit_Framework_TestCase
 
 		$listener = $this->getMock('Pelshoff\DCI\UserEventListener');
 
-		$context = new PostCommentContext($articleRepository, $commentRepository, $listener);
+		$context = new PostCommentContext($articleRepository, $commentRepository);
 
-		$result = $context->execute(new \Pelshoff\Blog\Comment\PostCommentRequest('test', '::1'));
+		$result = $context->execute($listener, new \Pelshoff\Blog\Comment\PostCommentRequest('test', '::1'));
 
+		$this->assertFalse($result->isOpened());
 		$this->assertNull($result->getArticle());
 		$this->assertNull($result->getComment());
 	}
@@ -43,10 +42,11 @@ class PostCommentContextTest extends \PHPUnit_Framework_TestCase
 
 		$listener = $this->getMock('Pelshoff\DCI\UserEventListener');
 
-		$context = new PostCommentContext($articleRepository, $commentRepository, $listener);
+		$context = new PostCommentContext($articleRepository, $commentRepository);
 
-		$result = $context->execute(new \Pelshoff\Blog\Comment\PostCommentRequest('test', '::1'));
+		$result = $context->execute($listener, new \Pelshoff\Blog\Comment\PostCommentRequest('test', '::1'));
 
+		$this->assertFalse($result->isOpened());
 		$this->assertEquals($article, $result->getArticle());
 		$this->assertNull($result->getComment());
 	}
@@ -62,10 +62,12 @@ class PostCommentContextTest extends \PHPUnit_Framework_TestCase
 		$listener = $this->getMock('Pelshoff\DCI\UserEventListener');
 		$listener->expects($this->once())->method('isSubmitted')->will($this->returnValue(true));
 
-		$context = new PostCommentContext($articleRepository, $commentRepository, $listener);
+		$context = new PostCommentContext($articleRepository, $commentRepository);
 
-		$result = $context->execute(new \Pelshoff\Blog\Comment\PostCommentRequest('test', '::1'));
+		$result = $context->execute($listener, new \Pelshoff\Blog\Comment\PostCommentRequest('test', '::1'));
 
+		$this->assertTrue($result->isOpened());
+		$this->assertFalse($result->isSuccess());
 		$this->assertEquals($article, $result->getArticle());
 		$this->assertNull($result->getComment());
 	}
@@ -86,9 +88,11 @@ class PostCommentContextTest extends \PHPUnit_Framework_TestCase
 		$listener->expects($this->once())->method('isValid')->will($this->returnValue(true));
 		$listener->expects($this->once())->method('getData')->will($this->returnValue($this->dummyPost));
 
-		$context = new PostCommentContext($articleRepository, $commentRepository, $listener);
-		$result = $context->execute(new \Pelshoff\Blog\Comment\PostCommentRequest('test', '::1'));
+		$context = new PostCommentContext($articleRepository, $commentRepository);
+		$result = $context->execute($listener, new \Pelshoff\Blog\Comment\PostCommentRequest('test', '::1'));
 
+		$this->assertTrue($result->isOpened());
+		$this->assertTrue($result->isSuccess());
 		$this->assertEquals($article, $result->getArticle());
 		$this->assertEquals($comment, $result->getComment());
 		$this->assertEquals('test-name', $comment->getName());

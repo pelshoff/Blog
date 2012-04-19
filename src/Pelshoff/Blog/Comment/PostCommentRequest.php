@@ -2,8 +2,6 @@
 namespace Pelshoff\Blog\Comment;
 
 /**
- *
- *
  * @author		Pim Elshoff <pim@pelshoff.com>
  */
 class PostCommentRequest
