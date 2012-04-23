@@ -1,5 +1,5 @@
 <?php
-namespace Pelshoff\DCI;
+namespace Pelshoff\Blog;
 
 /**
  * Model for returning results from a context
@@ -26,6 +26,8 @@ class ContextResult
 	}
 
 	/**
+	 * Indicate that the context has been opened by an event
+	 *
 	 * @return bool
 	 */
 	public function isOpened()
@@ -34,6 +36,8 @@ class ContextResult
 	}
 
 	/**
+	 * Indicate that the context has been opened and succesfully closed
+	 *
 	 * @return bool
 	 */
 	public function isSuccess()

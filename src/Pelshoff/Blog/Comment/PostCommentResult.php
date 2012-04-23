@@ -2,7 +2,7 @@
 
 namespace Pelshoff\Blog\Comment;
 
-use Pelshoff\DCI\ContextResult,
+use Pelshoff\Blog\ContextResult,
 	Pelshoff\Blog\Model\Article,
 	Pelshoff\Blog\Model\Comment;
 

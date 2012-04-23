@@ -21,7 +21,7 @@ class PostCommentContextTest extends \PHPUnit_Framework_TestCase
 
 		$commentRepository = $this->getMock('Pelshoff\Blog\Model\CommentRepository');
 
-		$listener = $this->getMock('Pelshoff\DCI\UserEventListener');
+		$listener = $this->getMock('Pelshoff\Blog\UserEventListener');
 
 		$context = new PostCommentContext($articleRepository, $commentRepository);
 
@@ -40,7 +40,7 @@ class PostCommentContextTest extends \PHPUnit_Framework_TestCase
 
 		$commentRepository = $this->getMock('Pelshoff\Blog\Model\CommentRepository');
 
-		$listener = $this->getMock('Pelshoff\DCI\UserEventListener');
+		$listener = $this->getMock('Pelshoff\Blog\UserEventListener');
 
 		$context = new PostCommentContext($articleRepository, $commentRepository);
 
@@ -59,7 +59,7 @@ class PostCommentContextTest extends \PHPUnit_Framework_TestCase
 
 		$commentRepository = $this->getMock('Pelshoff\Blog\Model\CommentRepository');
 
-		$listener = $this->getMock('Pelshoff\DCI\UserEventListener');
+		$listener = $this->getMock('Pelshoff\Blog\UserEventListener');
 		$listener->expects($this->once())->method('isSubmitted')->will($this->returnValue(true));
 
 		$context = new PostCommentContext($articleRepository, $commentRepository);
@@ -83,7 +83,7 @@ class PostCommentContextTest extends \PHPUnit_Framework_TestCase
 		$commentRepository->expects($this->once())->method('create')->will($this->returnValue($comment));
 		$commentRepository->expects($this->once())->method('store')->with($comment);
 
-		$listener = $this->getMock('Pelshoff\DCI\UserEventListener');
+		$listener = $this->getMock('Pelshoff\Blog\UserEventListener');
 		$listener->expects($this->once())->method('isSubmitted')->will($this->returnValue(true));
 		$listener->expects($this->once())->method('isValid')->will($this->returnValue(true));
 		$listener->expects($this->once())->method('getData')->will($this->returnValue($this->dummyPost));

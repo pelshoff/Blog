@@ -5,7 +5,7 @@ use Pelshoff\Blog\Model\Article,
 	Pelshoff\Blog\Model\ArticleRepository,
 	Pelshoff\Blog\Model\Comment,
 	Pelshoff\Blog\Model\CommentRepository,
-	Pelshoff\DCI\UserEventListener;
+	Pelshoff\Blog\UserEventListener;
 
 /**
  * Context for posting comments
@@ -25,8 +25,8 @@ class PostCommentContext
 	private $articleRepository;
 
 	/**
-	 * @param \Pelshoff\Blog\Model\ArticleRepository $articleRepository
-	 * @param \Pelshoff\Blog\Model\CommentRepository $commentRepository
+	 * @param ArticleRepository $articleRepository
+	 * @param CommentRepository $commentRepository
 	 */
 	public function __construct(ArticleRepository $articleRepository, CommentRepository $commentRepository)
 	{
@@ -36,7 +36,7 @@ class PostCommentContext
 
 	/**
 	 * @param PostCommentRequest $request
-	 * @param \Pelshoff\DCI\UserEventListener $listener
+	 * @param UserEventListener $listener
 	 * @return PostCommentResult
 	 */
 	public function execute(UserEventListener $listener, PostCommentRequest $request)
@@ -56,10 +56,10 @@ class PostCommentContext
 	}
 
 	/**
-	 * @param \Pelshoff\DCI\UserEventListener $listener
-	 * @param \Pelshoff\Blog\Model\Article $article
+	 * @param UserEventListener $listener
+	 * @param Article $article
 	 * @param PostCommentRequest $request
-	 * @return \Pelshoff\Blog\Model\Comment
+	 * @return Comment
 	 */
 	private function createComment(UserEventListener $listener, Article $article, PostCommentRequest $request)
 	{
@@ -81,8 +81,8 @@ class PostCommentContext
 	}
 
 	/**
-	 * @param \Pelshoff\Blog\Model\Comment $comment
-	 * @param \Pelshoff\Blog\Model\Article $article
+	 * @param Comment $comment
+	 * @param Article $article
 	 * @param array $data
 	 * @param $clientIp
 	 */

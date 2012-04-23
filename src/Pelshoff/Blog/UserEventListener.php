@@ -1,8 +1,8 @@
 <?php
-namespace Pelshoff\DCI;
+namespace Pelshoff\Blog;
 
 /**
- * User event listener contexts can respond to
+ * User event listener that contexts can respond to
  *
  * @author		Pim Elshoff <pim@pelshoff.com>
  */
